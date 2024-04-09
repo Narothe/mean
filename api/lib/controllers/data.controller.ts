@@ -13,7 +13,10 @@ class PostController implements Controller {
 
     private initializeRoutes() {
         this.router.get(`${this.path}/latest`, this.getAll);
+        this.router.get(`${this.path}/:id`, this.getId);
         this.router.post(`${this.path}/:id`, this.addData);
+        this.router.delete(`${this.path}/:id`, this.deleteData);
+        this.router.post(`${this.path}/:num`, this.getManyData); // pobieranie N elementów z tablicy
     }
 
     private getAll = async (request: Request, response: Response, next: NextFunction) => {
@@ -27,6 +30,40 @@ class PostController implements Controller {
 
         response.status(200).json(testArr);
     }
+
+    private getId = async (request: Request, response: Response, next: NextFunction) => {
+        const { id } = request.params;
+
+        if (! Number.isInteger(Number(id)) || Number(id) >= testArr.length || Number(id) < 0) {
+            return response.status(404).json({ error: "Not found." });
+        }
+
+        response.status(200).json(testArr[Number(id)]);
+    }
+
+    private deleteData = async (request: Request, response: Response, next: NextFunction) => {
+        const { id } = request.params;
+
+        if (! Number.isInteger(Number(id)) || Number(id) >= testArr.length || Number(id) < 0) {
+            return response.status(404).json({ error: "Not found." });
+        }
+
+        testArr = testArr.filter((elem, index) => index !== Number(id));
+
+        response.status(200).json(testArr);
+    }
+
+    private getManyData = async (request: Request, response: Response, next: NextFunction) => {
+        const { num } = request.params;
+
+        if (! Number.isInteger(Number(num)) || Number(num) >= testArr.length || Number(num) < 0) {
+            return response.status(404).json({ error: "Not found." });
+        }
+
+        response.status(200).json([...testArr].splice(0, Number(num)));
+    }
+
+
 }
 
 export default PostController;
