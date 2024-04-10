@@ -12,10 +12,10 @@ class PostController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/latest`, this.getAll);
-        this.router.get(`${this.path}/:id`, this.getId);
-        this.router.post(`${this.path}/:id`, this.addData);
-        this.router.delete(`${this.path}/:id`, this.deleteData);
+        this.router.get(`${this.path}/latest`, this.getAll); // pobranie wszystkich elementów
+        this.router.get(`${this.path}/:id`, this.getId); // pobranie elementu o danym id
+        this.router.post(`${this.path}`, this.addData); // dodanie elementu
+        this.router.delete(`${this.path}/:id`, this.deleteData); // usunięcie elementu
         this.router.post(`${this.path}/:num`, this.getManyData); // pobieranie N elementów z tablicy
     }
 
@@ -25,6 +25,10 @@ class PostController implements Controller {
 
     private addData = async (request: Request, response: Response, next: NextFunction) => {
         const { elem } = request.body;
+
+        if (elem === null || elem === undefined) {
+            return response.status(400).json({ error: "Bad request." });
+        }
 
         testArr.push(elem);
 
@@ -56,11 +60,12 @@ class PostController implements Controller {
     private getManyData = async (request: Request, response: Response, next: NextFunction) => {
         const { num } = request.params;
 
-        if (! Number.isInteger(Number(num)) || Number(num) >= testArr.length || Number(num) < 0) {
+        if (!Number.isInteger(Number(num)) || Number(num) >= testArr.length || Number(num) < 0) {
             return response.status(404).json({ error: "Not found." });
         }
 
-        response.status(200).json([...testArr].splice(0, Number(num)));
+        const slicedArray = testArr.slice(0, Number(num));
+        response.status(200).json(slicedArray);
     }
 
 
