@@ -12,11 +12,13 @@ class PostController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/latest`, this.getAll); // pobranie wszystkich elementów
         this.router.get(`${this.path}/:id`, this.getId); // pobranie elementu o danym id
         this.router.post(`${this.path}`, this.addData); // dodanie elementu
         this.router.delete(`${this.path}/:id`, this.deleteData); // usunięcie elementu
         this.router.post(`${this.path}/:num`, this.getManyData); // pobieranie N elementów z tablicy
+        this.router.get(`${this.path}`, this.getAll); // pobranie wszystkich elementów
+        this.router.delete(`${this.path}`, this.deleteAll); // usunięcie wszystkich elementów
+
     }
 
     private getAll = async (request: Request, response: Response, next: NextFunction) => {
@@ -68,7 +70,10 @@ class PostController implements Controller {
         response.status(200).json(slicedArray);
     }
 
-
+    private deleteAll = async (request: Request, response: Response, next: NextFunction) => {
+        testArr = [];
+        response.status(200).json(testArr);
+    }
 }
 
 export default PostController;
