@@ -74,6 +74,11 @@ class PostController implements Controller {
         testArr = [];
         response.status(200).json(testArr);
     }
+
+    // private initializeRoutes() {
+    //     this.router.post(`${this.path}/:num`, checkPostCount, this.getPostByNum);
+    // }
+
 }
 
 export default PostController;
