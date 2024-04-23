@@ -1,8 +1,7 @@
 import Controller from '../interfaces/controller.interface';
 import { Request, Response, NextFunction, Router } from 'express';
 import DataService from '../modules/services/data.service';
-
-let testArr = [4,5,6,3,5,3,7,5,13,5,6,4,3,6,3,6];
+import {logger} from "../middlewares/logger.middleware";
 
 class PostController implements Controller {
     public path = '/api/post';
@@ -14,10 +13,13 @@ class PostController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.post(`${this.path}`, this.addData); // dodanie elementu
-        this.router.get(`${this.path}/:id`, this.getElementById); // pobranie elementu o danym id
-        this.router.delete(`${this.path}/:id`, this.removePost); // usunięcie elementu
+        this.router.post(`${this.path}`, logger, this.addData); // dodanie elementu
+        this.router.get(`${this.path}/:id`, logger, this.getElementById); // pobranie elementu o danym id
+        this.router.delete(`${this.path}/:id`, logger, this.removePost); // usunięcie elementu
 
+        this.router.get(`${this.path}/:id`, logger, this.getById); // pobranie elementu o danym id
+        this.router.delete(`${this.path}/:id`, logger, this.deleteById); // usunięcie elementu
+        this.router.delete(`${this.path}`, logger, this.deleteAllPosts); // usunięcie wszystkich elementów
     }
 
     private addData = async (request: Request, response: Response, next: NextFunction) => {
@@ -50,6 +52,25 @@ class PostController implements Controller {
         await this.dataService.deleteData({_id: id});
         response.sendStatus(200);
     };
+
+    private getById = async (request: Request, response: Response, next: NextFunction) => {
+        const { id } = request.params;
+        const allData = await this.dataService.query({_id: id});
+        response.status(200).json(allData);
+    }
+
+    private deleteById = async (request: Request, response: Response, next: NextFunction) => {
+        const { id } = request.params;
+        await this.dataService.deleteData({_id: id});
+        response.sendStatus(200);
+    };
+
+    private deleteAllPosts = async (request: Request, response: Response, next: NextFunction) => {
+        await this.dataService.deleteData({});
+        response.sendStatus(200);
+    };
+
+
 }
 
 export default PostController;

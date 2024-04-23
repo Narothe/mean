@@ -1,5 +1,6 @@
 import Controller from '../interfaces/controller.interface';
 import { Request, Response, NextFunction, Router } from 'express';
+import {logger} from "../middlewares/logger.middleware";
 
 let testArr = [4,5,6,3,5,3,7,5,13,5,6,4,3,6,3,6];
 
@@ -12,12 +13,12 @@ class DataController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(`${this.path}/:id`, this.getId); // pobranie elementu o danym id
-        this.router.post(`${this.path}`, this.addData); // dodanie elementu
-        this.router.delete(`${this.path}/:id`, this.deleteData); // usunięcie elementu
-        this.router.post(`${this.path}/:num`, this.getManyData); // pobieranie N elementów z tablicy
-        this.router.get(`${this.path}`, this.getAll); // pobranie wszystkich elementów
-        this.router.delete(`${this.path}`, this.deleteAll); // usunięcie wszystkich elementów
+        this.router.get(`${this.path}/:id`, logger, this.getId); // pobranie elementu o danym id
+        this.router.post(`${this.path}`, logger, this.addData); // dodanie elementu
+        this.router.delete(`${this.path}/:id`, logger, this.deleteData); // usunięcie elementu
+        this.router.post(`${this.path}/:num`, logger, this.getManyData); // pobieranie N elementów z tablicy
+        this.router.get(`${this.path}`, logger, this.getAll); // pobranie wszystkich elementów
+        this.router.delete(`${this.path}`, logger, this.deleteAll); // usunięcie wszystkich elementów
     }
 
     private getAll = async (request: Request, response: Response, next: NextFunction) => {
