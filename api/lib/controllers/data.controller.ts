@@ -3,8 +3,8 @@ import { Request, Response, NextFunction, Router } from 'express';
 
 let testArr = [4,5,6,3,5,3,7,5,13,5,6,4,3,6,3,6];
 
-class PostController implements Controller {
-    public path = '/api/post';
+class DataController implements Controller {
+    public path = '/api/data';
     public router = Router();
 
     constructor() {
@@ -18,7 +18,6 @@ class PostController implements Controller {
         this.router.post(`${this.path}/:num`, this.getManyData); // pobieranie N elementów z tablicy
         this.router.get(`${this.path}`, this.getAll); // pobranie wszystkich elementów
         this.router.delete(`${this.path}`, this.deleteAll); // usunięcie wszystkich elementów
-
     }
 
     private getAll = async (request: Request, response: Response, next: NextFunction) => {
@@ -75,10 +74,6 @@ class PostController implements Controller {
         response.status(200).json(testArr);
     }
 
-    // private initializeRoutes() {
-    //     this.router.post(`${this.path}/:num`, checkPostCount, this.getPostByNum);
-    // }
-
 }
 
-export default PostController;
+export default DataController;

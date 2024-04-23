@@ -1,33 +1,55 @@
-// import { Request, Response, NextFunction } from 'express'; // Załóżmy, że używasz Express.js
-//
-// // Definicja middleware sprawdzającego wartość zmiennej :num
-// function checkNumMiddleware(req: Request, res: Response, next: NextFunction) {
-//     const num = parseInt(req.params.num); // Parsowanie wartości :num do liczby całkowitej
-//     if (isNaN(num)) {
-//         return res.status(400).json({ error: 'Invalid num parameter' });
-//     }
-//     // Tutaj możesz wykonać dodatkowe sprawdzenia lub modyfikacje, jeśli to konieczne
-//     next();
-// }
-//
-// // Kontroler obsługujący endpointy
-// class PostController {
-//     private path: string = "/yourpath"; // Ścieżka do endpointów
-//
-//     constructor(private router: any) { // Przyjmujemy router Express.js
-//         this.initializeRoutes();
-//     }
-//
-//     private initializeRoutes() {
-//         // Dodanie middleware checkNumMiddleware do endpointa
-//         this.router.post(`${this.path}/:num`, checkNumMiddleware, this.getPostByNum);
-//     }
-//
-//     private getPostByNum(req: Request, res: Response) {
-//         const num = parseInt(req.params.num);
-//         // Tutaj możesz obsłużyć żądanie zgodnie z wartością zmiennej :num
-//         res.json({ postNum: num });
-//     }
-// }
-//
-// export default PostController;
+import Controller from '../interfaces/controller.interface';
+import { Request, Response, NextFunction, Router } from 'express';
+import DataService from '../modules/services/data.service';
+
+let testArr = [4,5,6,3,5,3,7,5,13,5,6,4,3,6,3,6];
+
+class PostController implements Controller {
+    public path = '/api/post';
+    public router = Router();
+    public dataService = new DataService;
+
+    constructor() {
+        this.initializeRoutes();
+    }
+
+    private initializeRoutes() {
+        this.router.post(`${this.path}`, this.addData); // dodanie elementu
+        this.router.get(`${this.path}/:id`, this.getElementById); // pobranie elementu o danym id
+        this.router.delete(`${this.path}/:id`, this.removePost); // usunięcie elementu
+
+    }
+
+    private addData = async (request: Request, response: Response, next: NextFunction) => {
+        const {title, text, image} = request.body;
+
+        const readingData = {
+            title,
+            text,
+            image
+        };
+        try {
+            await this.dataService.createPost(readingData);
+            response.status(200).json(readingData);
+        } catch (error) {
+            console.log('eeee', error)
+
+            console.error(`Validation Error: ${error.message}`);
+            response.status(400).json({error: 'Invalid input data.'});
+        }
+    }
+
+    private getElementById = async (request: Request, response: Response, next: NextFunction) => {
+        const { id } = request.params;
+        const allData = await this.dataService.query({_id: id});
+        response.status(200).json(allData);
+    }
+
+    private removePost = async (request: Request, response: Response, next: NextFunction) => {
+        const { id } = request.params;
+        await this.dataService.deleteData({_id: id});
+        response.sendStatus(200);
+    };
+}
+
+export default PostController;
