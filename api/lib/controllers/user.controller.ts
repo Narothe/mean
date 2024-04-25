@@ -6,6 +6,8 @@ import UserService from "../modules/services/user.service";
 import PasswordService from "../modules/services/password.service";
 import TokenService from "../modules/services/token.service";
 import {logger} from "../middlewares/logger.middleware";
+import nodemailer from 'nodemailer';
+import {config} from "../config";
 
 class UserController implements Controller {
     public path = '/api/user';
@@ -22,6 +24,8 @@ class UserController implements Controller {
         this.router.post(`${this.path}/create`, logger, this.createNewOrUpdate);
         this.router.post(`${this.path}/auth`, logger, this.authenticate);
         this.router.delete(`${this.path}/logout/:userId`, auth, logger, this.removeHashSession);
+        this.router.post(`${this.path}/reset-password`, logger, this.resetPassword); // Nowy endpoint do resetowania hasła
+
     }
 
     private authenticate = async (request: Request, response: Response, next: NextFunction) => {
@@ -71,6 +75,57 @@ class UserController implements Controller {
             response.status(401).json({error: 'Unauthorized'});
         }
     };
+
+    private async sendPasswordResetEmail(email: string, newPassword: string): Promise<void> {
+        // Konfiguracja nodemailer
+        const transporter = nodemailer.createTransport({
+            // Skonfiguruj odpowiednie ustawienia dostawcy poczty
+            // Na przykład, dla Gmaila można użyć usługi SMTP
+            service: 'onet',
+            auth: {
+                user: 'connectify@onet.pl', // Tutaj podaj swój adres e-mail
+                pass: 'Conn3ctify' // Tutaj podaj hasło do swojego konta e-mail
+            }
+        });
+
+        // Treść wiadomości e-mail
+        const mailOptions = {
+            from: 'connectify@onet.pl', // Twój adres e-mail
+            to: email, // Adres e-mail odbiorcy
+            subject: 'Resetowanie hasła',
+            text: `Twoje nowe hasło to: ${newPassword}`
+        };
+
+        // Wysyłka wiadomości e-mail
+        await transporter.sendMail(mailOptions);
+    }
+
+    private async resetPassword(request: Request, response: Response, next: NextFunction) {
+        const { emailOrUsername } = request.body;
+
+        try {
+            // Sprawdź czy istnieje użytkownik o podanym adresie email lub nazwie użytkownika
+            const user = await this.userService.getByEmailOrName(emailOrUsername);
+            if (!user) {
+                return response.status(404).json({ error: 'User not found' });
+            }
+
+            // Generuj nowe hasło
+            const newPassword = this.passwordService.generateRandomPassword();
+            const hashedPassword = await this.passwordService.hashPassword(newPassword);
+
+            // Aktualizuj hasło użytkownika
+            await this.passwordService.createOrUpdate({ userId: user.id, password: hashedPassword });
+
+            // Wysyłka nowego hasła na adres email użytkownika
+            await this.sendPasswordResetEmail(user.email, newPassword);
+
+            return response.status(200).json({ message: 'Password reset successful' });
+        } catch (error) {
+            console.error(`Password Reset Error: ${error.message}`);
+            return response.status(500).json({ error: 'Internal server error' });
+        }
+    }
 
 
 
