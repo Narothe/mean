@@ -9,6 +9,8 @@ import {logger} from "../middlewares/logger.middleware";
 import nodemailer from 'nodemailer';
 import {config} from "../config";
 import {sendEmail} from "../utils/sendEmail";
+import {authSecured} from "../middlewares/authSecure.middleware";
+import {Role} from "../types";
 
 class UserController implements Controller {
     public path = '/api/user';
@@ -26,6 +28,8 @@ class UserController implements Controller {
         this.router.post(`${this.path}/auth`, logger, this.authenticate);
         this.router.delete(`${this.path}/logout/:userId`, auth, logger, this.removeHashSession);
         this.router.post(`${this.path}/reset-password`, logger, this.resetPassword); // Nowy endpoint do resetowania hasła
+        this.router.delete(`${this.path}/delete`, authSecured, logger, this.deleteUser);
+        this.router.post(`${this.path}/create-admin`, logger, this.createNewOrUpdateAdmin);
 
     }
 
@@ -49,6 +53,7 @@ class UserController implements Controller {
     private createNewOrUpdate = async (request: Request, response: Response, next: NextFunction) => {
         const userData = request.body;
         try {
+            userData.role = Role.USER;
             const user = await this.userService.createNewOrUpdate(userData);
             if (userData.password) {
                 const hashedPassword = await this.passwordService.hashPassword(userData.password)
@@ -109,33 +114,45 @@ class UserController implements Controller {
             return response.status(500).json({ error: 'Internal server error' });
         }
     }
-    // private resetPassword = async (request: Request, response: Response, next: NextFunction) => {
-    //     const { emailOrUsername } = request.body;
-    //
-    //     try {
-    //         // Sprawdź czy istnieje użytkownik o podanym adresie email lub nazwie użytkownika
-    //         const user = await this.userService.getByEmailOrName(emailOrUsername);
-    //         if (!user) {
-    //             return response.status(404).json({ error: 'User not found' });
-    //         }
-    //
-    //         // Generuj nowe hasło
-    //         const newPassword = this.passwordService.generateRandomPassword();
-    //         const hashedPassword = await this.passwordService.hashPassword(newPassword);
-    //
-    //         // Aktualizuj hasło użytkownika
-    //         await this.passwordService.createOrUpdate({ userId: user.id, password: hashedPassword });
-    //
-    //         // Wysyłka nowego hasła na adres email użytkownika
-    //         // Tutaj możesz umieścić kod wysyłki emaila z nowym hasłem
-    //
-    //         return response.status(200).json({ message: 'Password reset successful', newPassword });
-    //     } catch (error) {
-    //         console.error(`Password Reset Error: ${error.message}`);
-    //         return response.status(500).json({ error: 'Internal server error' });
-    //     }
-    // };
 
+    private deleteUser = async (request: Request, response: Response, next: NextFunction) => {
+        const { userId } = request.body;
+        try {
+            // Sprawdź, czy użytkownik istnieje przed próbą usunięcia
+            const existingUser = await this.userService.getById(userId);
+            if (!existingUser) {
+                return response.status(404).json({ error: 'User not found' });
+            }
+
+            // Jeśli użytkownik istnieje, usuń go
+            await this.userService.deleteUser(userId);
+            response.status(200).json({ message: 'User deleted' });
+        } catch (error) {
+            console.error(`Delete User Error: ${error.message}`);
+            response.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+
+    private createNewOrUpdateAdmin = async (request: Request, response: Response, next: NextFunction) => {
+        const userData = request.body;
+        try {
+            userData.role = Role.ADMIN;
+            const user = await this.userService.createNewOrUpdate(userData);
+            if (userData.password) {
+                const hashedPassword = await this.passwordService.hashPassword(userData.password)
+                await this.passwordService.createOrUpdate({
+                    userId: user._id,
+                    password: hashedPassword
+                });
+            }
+            response.status(200).json(user);
+        } catch (error) {
+            console.error(`Validation Error: ${error.message}`);
+            response.status(400).json({error: 'Bad request', value: error.message});
+        }
+
+    };
 
 }
 

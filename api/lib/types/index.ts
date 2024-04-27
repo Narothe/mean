@@ -5,3 +5,7 @@ export interface IMailOptions  {
     text: string
 }
 
+export enum Role {
+    ADMIN = 'admin',
+    USER = 'user'
+}

@@ -29,6 +29,33 @@ class UserService {
         }
     }
 
+    public async deleteUser(userId: string) {
+        try {
+            return await UserModel.findByIdAndDelete(userId);
+        } catch (error) {
+            console.error('Wystąpił błąd podczas usuwania danych:', error);
+            throw new Error('Wystąpił błąd podczas usuwania danych');
+        }
+    }
+
+
+    public async getById(userId: string) {
+        try {
+            // Użyj metody modelu, aby pobrać użytkownika z bazy danych na podstawie ID
+            const user = await UserModel.findById(userId);
+
+            // Sprawdź, czy użytkownik został znaleziony
+            if (!user) {
+                throw new Error('User not found');
+            }
+
+            // Zwróć znalezionego użytkownika
+            return user;
+        } catch (error) {
+            // Obsłuż błędy, na przykład gdy użytkownik nie zostanie znaleziony w bazie danych
+            throw new Error(`Error fetching user by ID: ${error.message}`);
+        }
+    }
 
 }
 
