@@ -86,25 +86,21 @@ class UserController implements Controller {
         const { emailOrUsername } = request.body;
 
         try {
-            // Sprawdź czy istnieje użytkownik o podanym adresie email lub nazwie użytkownika
             const user = await this.userService.getByEmailOrName(emailOrUsername);
             if (!user) {
                 return response.status(404).json({ error: 'User not found' });
             }
 
-            // Generuj nowe hasło
             const newPassword = this.passwordService.generateRandomPassword();
             const hashedPassword = await this.passwordService.hashPassword(newPassword);
 
-            // Aktualizuj hasło użytkownika
             await this.passwordService.createOrUpdate({ userId: user.id, password: hashedPassword });
 
-            // Wysyłka nowego hasła na adres email użytkownika
             const mailOptions = {
-                from: 'connectify@onet.pl', // Adres e-mail nadawcy
-                to: user.email, // Adres e-mail odbiorcy
-                subject: 'Password Reset', // Temat wiadomości
-                text: `Your new password is: ${newPassword}` // Treść wiadomości
+                from: 'connectify@onet.pl',
+                to: user.email,
+                subject: 'Password Reset',
+                text: `Your new password is: ${newPassword}`
             };
             sendEmail(mailOptions); // Wywołanie funkcji do wysyłania e-maili
 
@@ -118,13 +114,11 @@ class UserController implements Controller {
     private deleteUser = async (request: Request, response: Response, next: NextFunction) => {
         const { userId } = request.body;
         try {
-            // Sprawdź, czy użytkownik istnieje przed próbą usunięcia
             const existingUser = await this.userService.getById(userId);
             if (!existingUser) {
                 return response.status(404).json({ error: 'User not found' });
             }
 
-            // Jeśli użytkownik istnieje, usuń go
             await this.userService.deleteUser(userId);
             response.status(200).json({ message: 'User deleted' });
         } catch (error) {

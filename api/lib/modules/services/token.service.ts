@@ -3,6 +3,15 @@ import  TokenModel  from '../schemas/token.schema';
 import {config} from '../../config';
 
 class TokenService {
+    public async removeExpiredTokens(): Promise<void> {
+        try {
+            await TokenModel.deleteMany({ createDate: { $lt: new Date(Date.now() - config.tokenExpiration) } });
+            console.log('Expired tokens removed.');
+        } catch (error) {
+            console.error('Error while removing expired tokens:', error);
+            throw new Error('Error while removing expired tokens');
+        }
+    }
     public async create(user: any) {
         const access = 'auth';
         const userData = {
@@ -17,7 +26,7 @@ class TokenService {
             userData,
             config.JwtSecret,
             {
-                expiresIn: '3h'
+                expiresIn: config.tokenExpiration
             });
 
         try {
