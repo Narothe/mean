@@ -6,8 +6,8 @@ const data = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: 'connectify@onet.pl',
-        pass: 'Conn3ctify'
+        user: '***',
+        pass: '***'
     }
 });
 
