@@ -8,6 +8,7 @@ import TokenService from "../modules/services/token.service";
 import {logger} from "../middlewares/logger.middleware";
 import nodemailer from 'nodemailer';
 import {config} from "../config";
+import {sendEmail} from "../utils/sendEmail";
 
 class UserController implements Controller {
     public path = '/api/user';
@@ -76,31 +77,7 @@ class UserController implements Controller {
         }
     };
 
-    private async sendPasswordResetEmail(email: string, newPassword: string): Promise<void> {
-        // Konfiguracja nodemailer
-        const transporter = nodemailer.createTransport({
-            // Skonfiguruj odpowiednie ustawienia dostawcy poczty
-            // Na przykład, dla Gmaila można użyć usługi SMTP
-            service: 'onet',
-            auth: {
-                user: 'connectify@onet.pl', // Tutaj podaj swój adres e-mail
-                pass: 'Conn3ctify' // Tutaj podaj hasło do swojego konta e-mail
-            }
-        });
-
-        // Treść wiadomości e-mail
-        const mailOptions = {
-            from: 'connectify@onet.pl', // Twój adres e-mail
-            to: email, // Adres e-mail odbiorcy
-            subject: 'Resetowanie hasła',
-            text: `Twoje nowe hasło to: ${newPassword}`
-        };
-
-        // Wysyłka wiadomości e-mail
-        await transporter.sendMail(mailOptions);
-    }
-
-    private async resetPassword(request: Request, response: Response, next: NextFunction) {
+    private resetPassword = async (request: Request, response: Response, next: NextFunction) => {
         const { emailOrUsername } = request.body;
 
         try {
@@ -118,7 +95,13 @@ class UserController implements Controller {
             await this.passwordService.createOrUpdate({ userId: user.id, password: hashedPassword });
 
             // Wysyłka nowego hasła na adres email użytkownika
-            await this.sendPasswordResetEmail(user.email, newPassword);
+            const mailOptions = {
+                from: 'connectify@onet.pl', // Adres e-mail nadawcy
+                to: user.email, // Adres e-mail odbiorcy
+                subject: 'Password Reset', // Temat wiadomości
+                text: `Your new password is: ${newPassword}` // Treść wiadomości
+            };
+            sendEmail(mailOptions); // Wywołanie funkcji do wysyłania e-maili
 
             return response.status(200).json({ message: 'Password reset successful' });
         } catch (error) {
@@ -126,7 +109,32 @@ class UserController implements Controller {
             return response.status(500).json({ error: 'Internal server error' });
         }
     }
-
+    // private resetPassword = async (request: Request, response: Response, next: NextFunction) => {
+    //     const { emailOrUsername } = request.body;
+    //
+    //     try {
+    //         // Sprawdź czy istnieje użytkownik o podanym adresie email lub nazwie użytkownika
+    //         const user = await this.userService.getByEmailOrName(emailOrUsername);
+    //         if (!user) {
+    //             return response.status(404).json({ error: 'User not found' });
+    //         }
+    //
+    //         // Generuj nowe hasło
+    //         const newPassword = this.passwordService.generateRandomPassword();
+    //         const hashedPassword = await this.passwordService.hashPassword(newPassword);
+    //
+    //         // Aktualizuj hasło użytkownika
+    //         await this.passwordService.createOrUpdate({ userId: user.id, password: hashedPassword });
+    //
+    //         // Wysyłka nowego hasła na adres email użytkownika
+    //         // Tutaj możesz umieścić kod wysyłki emaila z nowym hasłem
+    //
+    //         return response.status(200).json({ message: 'Password reset successful', newPassword });
+    //     } catch (error) {
+    //         console.error(`Password Reset Error: ${error.message}`);
+    //         return response.status(500).json({ error: 'Internal server error' });
+    //     }
+    // };
 
 
 }

@@ -28,6 +28,8 @@ class UserService {
             throw new Error('Wystąpił błąd podczas pobierania danych');
         }
     }
+
+
 }
 
 export default UserService;
