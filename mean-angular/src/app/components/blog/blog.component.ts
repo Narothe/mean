@@ -1,13 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {DataService} from "../../services/data.service";
 import {BlogItemComponent} from "../blog-item/blog-item.component";
 import {CommonModule} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
+import {FilterTextPipe} from "../../pipes/filter-text.pipe";
 
 @Component({
-  selector: 'app-blog',
+  selector: 'blog',
   standalone: true,
-  imports: [HttpClientModule, BlogItemComponent, CommonModule],
+  imports: [HttpClientModule, BlogItemComponent, CommonModule, FilterTextPipe],
   providers: [DataService],
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.css'
@@ -15,6 +16,7 @@ import {HttpClientModule} from "@angular/common/http";
 export class BlogComponent implements OnInit {
 
   public items$: any;
+  @Input() filterText?: string;
 
   constructor(private service: DataService) {
   }
@@ -28,4 +30,3 @@ export class BlogComponent implements OnInit {
     });
   }
 }
-
