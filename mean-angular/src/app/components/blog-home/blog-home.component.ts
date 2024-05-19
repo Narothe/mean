@@ -3,7 +3,7 @@ import {BlogComponent} from "../blog/blog.component";
 import {SearchBarComponent} from "../../shared/search-bar/search-bar.component";
 
 @Component({
-  selector: 'blog-home',
+  selector: 'app-blog-home',
   standalone: true,
   imports: [SearchBarComponent, BlogComponent],
   templateUrl: './blog-home.component.html',
