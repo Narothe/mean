@@ -11,7 +11,7 @@
 //
 // }
 
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {BlogItemImageComponent} from "../blog-item-image/blog-item-image.component";
 import {BlogItemTextComponent} from "../blog-item-text/blog-item-text.component";
 
@@ -22,9 +22,14 @@ import {BlogItemTextComponent} from "../blog-item-text/blog-item-text.component"
   templateUrl: './blog-item.component.html',
   styleUrl: './blog-item.component.css'
 })
-export class BlogItemComponent {
+export class BlogItemComponent implements OnInit {
   @Input() image?: string;
   @Input() text?: string;
   @Input() title?: string;
+  @Input() id?: number;
 
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 }

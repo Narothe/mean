@@ -1,16 +1,3 @@
-// import { Pipe, PipeTransform } from '@angular/core';
-//
-// @Pipe({
-//   name: 'summary',
-//   standalone: true
-// })
-// export class SummaryPipe implements PipeTransform {
-//
-//   transform(value: unknown, ...args: unknown[]): unknown {
-//     return null;
-//   }
-//
-// }
 import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
