@@ -12,19 +12,19 @@ export class DataService {
   }
 
   getAll() {
-    return this.http.get(this.url + '/api/posts/');
+    return this.http.get(this.url + '/api/data/');
   }
 
   getById(id: string | null) {
-    return this.http.get(this.url + '/api/posts/' + id);
+    return this.http.get(this.url + '/api/data/' + id);
   }
 
   getByText(data: any) {
-    return this.http.post(this.url + '/api/posts/', data);
+    return this.http.post(this.url + '/api/data/', data);
   }
 
   createOrUpdate(post: any) {
-    return this.http.post(`${this.url}/api/posts`, post);
+    return this.http.post(`${this.url}/api/data`, post);
   }
 
 
