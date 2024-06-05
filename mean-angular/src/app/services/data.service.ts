@@ -12,22 +12,12 @@ export class DataService {
   }
 
   getAll() {
-    return this.http.get(this.url + '/api/data/');
+    return this.http.get(this.url + '/api/posts/'); // /api/data
   }
 
   getById(id: string | null) {
-    return this.http.get(this.url + '/api/data/' + id);
+    return this.http.get(this.url + '/api/posts/' + id); // /api/data
   }
-
-  getByText(data: any) {
-    return this.http.post(this.url + '/api/data/', data);
-  }
-
-  createOrUpdate(post: any) {
-    return this.http.post(`${this.url}/api/data`, post);
-  }
-
-
 
 }
 
