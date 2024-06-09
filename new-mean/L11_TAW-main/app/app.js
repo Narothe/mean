@@ -7,6 +7,16 @@ import morgan from 'morgan';
 import routes from './REST/routes';
 
 const app = express();
+
+console.log('' +
+    '    ██╗  ██╗ █████╗ ██████╗ ██████╗ ██╗   ██╗    ██╗  ██╗ █████╗  ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗ ██╗\n' +
+    '    ██║  ██║██╔══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝    ██║  ██║██╔══██╗██╔════╝██║ ██╔╝██║████╗  ██║██╔════╝ ██║\n' +
+    '    ███████║███████║██████╔╝██████╔╝ ╚████╔╝     ███████║███████║██║     █████╔╝ ██║██╔██╗ ██║██║  ███╗██║\n' +
+    '    ██╔══██║██╔══██║██╔═══╝ ██╔═══╝   ╚██╔╝      ██╔══██║██╔══██║██║     ██╔═██╗ ██║██║╚██╗██║██║   ██║╚═╝\n' +
+    '    ██║  ██║██║  ██║██║     ██║        ██║       ██║  ██║██║  ██║╚██████╗██║  ██╗██║██║ ╚████║╚██████╔╝██╗\n' +
+    '    ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝        ╚═╝       ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝\n' +
+    '                                                                                                          ');
+
 app.use(express.static(__dirname + '/public'));
 
 app.use(morgan('dev'));
@@ -41,4 +51,5 @@ app.get('/*', function (req, res) {
 
 app.listen(config.port, function () {
     console.info(`Server is running at ${config.port}`)
+    console.info(`click here to open in browser: http://localhost:${config.port})`);
 });

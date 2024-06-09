@@ -16,6 +16,7 @@ export class DataService {
   }
 
   getById(id: string) {
+    console.log('data-service -> id:', id)
     return this.http.get(this.url + '/api/posts/' + id);
   }
 
