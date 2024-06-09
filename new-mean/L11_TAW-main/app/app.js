@@ -13,17 +13,15 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json({limit: '2048kb'}));
 
-app.use(express.static('public'));
-
 app.use(cors());
 
+mongoose.set('strictQuery', true);
 mongoose.connect(config.databaseUrl, {
     useNewUrlParser: true
 }, (error) => {
     if (error) {
         console.error(error);
-    }
-    else {
+    } else {
         console.info('Connect with database established');
     }
 });
@@ -35,13 +33,12 @@ process.on('SIGINT', () => {
     });
 });
 
-
 routes(app);
 
 app.get('/*', function (req, res) {
-  res.sendFile(__dirname + '/public/index.html');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 app.listen(config.port, function () {
-  console.info(`Server is running at ${config.port}`)
+    console.info(`Server is running at ${config.port}`)
 });
