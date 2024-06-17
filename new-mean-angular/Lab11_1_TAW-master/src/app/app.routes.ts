@@ -22,5 +22,14 @@ export const routes: Routes = [
   {
     path: 'signup',
     loadComponent: () => import('./components/signup/signup.component').then(m => m.SignupComponent)
+  },
+  {
+    path: 'post',
+    loadComponent: () => import('./components/post/post.component').then(m => m.PostComponent),
+  },
+  {
+    path: '**',
+    redirectTo: '', // Przekierowanie do strony domowej
+    pathMatch: 'full'
   }
 ];
