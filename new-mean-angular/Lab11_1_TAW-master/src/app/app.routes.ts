@@ -13,7 +13,8 @@ export const routes: Routes = [
   },
   {
     path: 'blog/detail/:id',
-    loadComponent: () => import('./components/blog-item-details/blog-item-details.component').then(m => m.BlogItemDetailsComponent)
+    loadComponent: () => import('./components/blog-item-details/blog-item-details.component').then(m => m.BlogItemDetailsComponent),
+    canActivate: [authGuard]
   },
   {
     path: 'login',
@@ -26,10 +27,11 @@ export const routes: Routes = [
   {
     path: 'post',
     loadComponent: () => import('./components/post/post.component').then(m => m.PostComponent),
+    canActivate: [authGuard]
   },
   {
     path: '**',
-    redirectTo: '', // Przekierowanie do strony domowej
+    redirectTo: '',
     pathMatch: 'full'
   }
 ];

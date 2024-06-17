@@ -1,1 +1,19 @@
-<p>post works!</p>
+<div class="container">
+  <form (ngSubmit)="createPost()" #postForm="ngForm">
+    <div class="input-group">
+      <input type="text" class="form-control" name="title" placeholder="Title" title="Title" required [(ngModel)]="post.title"/>
+    </div>
+
+    <div class="input-group">
+      <input class="form-control" name="text" placeholder="Text" title="Text" required [(ngModel)]="post.text"/>
+    </div>
+
+    <div class="input-group">
+      <input class="form-control" name="url" placeholder="Url" title="Url" required [(ngModel)]="post.image"/>
+    </div>
+
+    <button class="btn btn-primary" type="submit" title="Add post" [disabled]="!postForm.form.valid">
+      Add post
+    </button>
+  </form>
+</div>
