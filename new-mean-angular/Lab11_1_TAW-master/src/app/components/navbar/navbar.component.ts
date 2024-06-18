@@ -3,16 +3,22 @@ import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import {SearchBarComponent} from "../search-bar/search-bar.component";
+import {BlogComponent} from "../blog/blog.component";
+import {BlogHomeComponent} from "../blog-home/blog-home.component";
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, FormsModule, CommonModule],
+  imports: [RouterModule, FormsModule, CommonModule, SearchBarComponent, BlogComponent, BlogHomeComponent],
   providers: [AuthService],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+
+  public filterText: string = '';
+
   constructor(public authService: AuthService, public router: Router) { }
 
   ngOnInit(): void { }
@@ -22,5 +28,9 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/']);
       return result;
     });
+  }
+
+  getName($event: string): void {
+    this.filterText = $event;
   }
 }
