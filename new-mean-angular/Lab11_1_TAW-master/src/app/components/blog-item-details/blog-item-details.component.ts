@@ -13,6 +13,7 @@ import {HttpClientModule} from "@angular/common/http";
 })
 export class BlogItemDetailsComponent implements OnInit {
   public image: string = '';
+  public title: string = '';
   public text: string = '';
 
   constructor(private service: DataService, private route: ActivatedRoute) {
@@ -28,6 +29,7 @@ export class BlogItemDetailsComponent implements OnInit {
     this.service.getById(id).subscribe((res: any) => {
       const post = res;
       this.image = post['image'];
+      this.title = post['title'];
       this.text = post['text'];
     });
 
