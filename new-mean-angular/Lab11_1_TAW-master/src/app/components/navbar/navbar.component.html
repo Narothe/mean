@@ -1,37 +1,27 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Home</a>
+    <a class="btn btn-light me-2" href="#">Home</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li *ngIf="authService.isLoggedIn()" class="nav-item">
-          <a class="nav-link" [routerLink]="['/blog']">Blog</a>
+        <li *ngIf="authService.isLoggedIn()" class="nav-item me-2">
+          <a class="btn btn-light" [routerLink]="['/blog']">Blog</a>
         </li>
         <li *ngIf="authService.isLoggedIn()" class="nav-item">
-          <a class="nav-link" [routerLink]="['/post']">Add post</a>
+          <a class="btn btn-light" [routerLink]="['/post']">Add post</a>
         </li>
       </ul>
       <form *ngIf="authService.isLoggedIn()" class="d-flex" role="search">
-<!--        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
-<!--        <button class="btn btn-outline-success" type="submit">Search</button>-->
-        <app-search-bar (name)="getName($event)">
-        </app-search-bar>
-<!--        <app-blog [filterText]="filterText">-->
-<!--        </app-blog>-->
-
-
-
-
-
+        <app-search-bar (name)="getName($event)"></app-search-bar>
       </form>
       <div class="d-flex">
         <div class="d-flex" *ngIf="!authService.isLoggedIn()">
-          <a class="nav-link" [routerLink]="['/login']">Login</a>
-          <a class="nav-link" [routerLink]="['/signup']">SignUp</a>
+          <a class="btn btn-outline-dark" [routerLink]="['/login']">Login</a>
+          <a class="btn btn-outline-dark ms-2" [routerLink]="['/signup']">SignUp</a>
         </div>
-        <button *ngIf="authService.isLoggedIn()" class="btn nav-link" (click)="signOut()">Wyloguj</button>
+        <button *ngIf="authService.isLoggedIn()" class="btn btn-outline-danger ms-2" (click)="signOut()">Wyloguj</button>
       </div>
     </div>
   </div>

@@ -3,9 +3,9 @@ import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {SearchBarComponent} from "../search-bar/search-bar.component";
-import {BlogComponent} from "../blog/blog.component";
-import {BlogHomeComponent} from "../blog-home/blog-home.component";
+import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { BlogComponent } from '../blog/blog.component';
+import { BlogHomeComponent } from '../blog-home/blog-home.component';
 
 @Component({
   selector: 'app-navbar',
@@ -31,6 +31,9 @@ export class NavbarComponent implements OnInit {
   }
 
   getName($event: string): void {
-    this.filterText = $event;
+    if (this.filterText !== $event) {
+      this.filterText = $event;
+      this.router.navigate(['/blog'], { queryParams: { name: this.filterText.toLowerCase() } });
+    }
   }
 }

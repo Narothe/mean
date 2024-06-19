@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {SearchBarComponent} from "../search-bar/search-bar.component";
-import {BlogComponent} from "../blog/blog.component";
-import {HttpClientModule} from "@angular/common/http";
+import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { BlogComponent } from '../blog/blog.component';
+import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blog-home',
@@ -9,20 +10,20 @@ import {HttpClientModule} from "@angular/common/http";
   imports: [HttpClientModule, SearchBarComponent, BlogComponent],
   providers: [],
   templateUrl: './blog-home.component.html',
-  styleUrl: './blog-home.component.css'
+  styleUrls: ['./blog-home.component.css']
 })
 export class BlogHomeComponent implements OnInit {
 
   public filterText: string = '';
 
-  constructor() {
-  }
+  constructor(private router: Router) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   getName($event: string): void {
-    this.filterText = $event;
+    if (this.filterText !== $event) {
+      this.filterText = $event;
+      this.router.navigate(['/blog'], { queryParams: { name: this.filterText.toLowerCase() } });
+    }
   }
 }
-
