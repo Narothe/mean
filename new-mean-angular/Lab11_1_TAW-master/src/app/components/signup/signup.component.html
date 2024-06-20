@@ -2,28 +2,29 @@
   <h1 class="entry-title"><span>Create Account</span></h1>
   <hr>
   <div class="container justify-content-center align-items-center flex-column d-flex">
-    <form class="justify-content-center align-items-center flex-column d-flex mt-2" style="width: 60vw;" method="post" name="signup" id="signup">
+    <form (ngSubmit)="create()" class="justify-content-center align-items-center flex-column d-flex mt-2" style="width: 60vw;" #signupForm="ngForm">
       <div class="form-group mb-2 w-100">
         <label class="control-label mt-1">Email<span class="text-danger">*</span></label>
-        <input type="email" class="form-control" name="emailid" id="emailid" placeholder="Type email" value="" [(ngModel)]="credentials.email">
+        <input type="email" class="form-control" name="email" id="email" placeholder="Type email" [(ngModel)]="credentials.email" required email>
       </div>
 
       <div class="form-group mb-2 w-100">
         <label class="control-label mt-1">Password<span class="text-danger">*</span></label>
-        <input type="password" class="form-control" name="password" id="password" placeholder="Enter password (5-15 characters)" value="" [(ngModel)]="credentials.password">
+        <input type="password" class="form-control" name="password" id="password" placeholder="Enter password (5-15 characters)" [(ngModel)]="credentials.password" required minlength="5" maxlength="15">
       </div>
 
       <div class="form-group mb-2 w-100">
         <label class="control-label mt-1">Re-password<span class="text-danger">*</span></label>
-        <input type="password" class="form-control" name="cpassword" id="cpassword" placeholder="Type re-password" value="">
+        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Type re-password" [(ngModel)]="credentials.confirmPassword" required>
       </div>
 
       <div class="form-group mb-2 w-100">
         <label class="control-label mt-1">Name<span class="text-danger">*</span></label>
-        <input type="text" class="form-control" name="mem_name" id="mem_name" placeholder="Type name" value="" [(ngModel)]="credentials.name">
+        <input type="text" class="form-control" name="name" id="name" placeholder="Type name" [(ngModel)]="credentials.name" required>
       </div>
 
-      <button (click)="create()" name="Submit" type="submit" class="btn btn-outline-primary" title="Przycisk zarejestruj">Sign Up</button>
+      <button name="Submit" type="submit" class="btn btn-outline-primary" title="Przycisk zarejestruj" [disabled]="!signupForm.form.valid">Sign Up</button>
     </form>
   </div>
+  <p-toast></p-toast>
 </section>

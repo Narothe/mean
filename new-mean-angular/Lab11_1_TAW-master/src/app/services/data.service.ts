@@ -25,5 +25,8 @@ export class DataService {
   }
 
 
+  deleteBlogItem(id: any) {
+    return this.http.delete(this.url + '/api/posts/' + id);
+  }
 }
 

@@ -45,10 +45,19 @@ async function createNewOrUpdate(data) {
     });
 }
 
+async function remove(id) {
+    return PostModel.findByIdAndDelete(id).then(function (result) {
+        if (result) {
+            return mongoConverter(result);
+        }
+    });
+}
+
 export default {
     query: query,
     get: get,
     createNewOrUpdate: createNewOrUpdate,
+    remove: remove,
 
     model: PostModel
 };

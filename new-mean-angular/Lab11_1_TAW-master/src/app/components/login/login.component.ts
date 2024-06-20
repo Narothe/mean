@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Błąd logowania', detail: 'Nieprawidłowy login lub hasło.' });
       } else {
         console.log('Zalogowano pomyślnie.');
-        this.messageService.add({ severity: 'success', summary: 'Sukces', detail: 'Zalogowano pomyślnie.' });
         this.logout = false;
         this.credentials = {
           login: '',
