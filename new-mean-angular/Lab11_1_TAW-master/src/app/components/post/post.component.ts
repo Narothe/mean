@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
-import {DataService} from "../../services/data.service";
-import {Router} from "@angular/router";
-import {FormsModule} from "@angular/forms";
+import { DataService } from '../../services/data.service';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // Import CommonModule
 
 @Component({
   selector: 'app-post',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    CommonModule // Dodanie CommonModule do importów
   ],
   templateUrl: './post.component.html',
-  styleUrl: './post.component.css'
+  styleUrls: ['./post.component.css']
 })
 export class PostComponent {
   post = {
@@ -18,13 +20,18 @@ export class PostComponent {
     image: '',
     text: ''
   };
+
   constructor(private service: DataService, private router: Router) { }
 
   createPost() {
-    this.service.createPost(this.post).subscribe(response => {
-      this.router.navigate(['/']);
-    }, error => {
-      console.log(error);
-    });
+    if (this.post.title && this.post.image && this.post.text) {
+      this.service.createPost(this.post).subscribe(response => {
+        this.router.navigate(['/']);
+      }, error => {
+        console.error(error);
+      });
+    } else {
+      console.error('Form is invalid');
+    }
   }
 }
