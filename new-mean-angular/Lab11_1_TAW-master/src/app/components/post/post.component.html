@@ -1,19 +1,22 @@
 <div class="container">
-  <form (ngSubmit)="createPost()" #postForm="ngForm">
-    <div class="input-group">
+  <h1 class="entry-title"><span>Add post</span></h1><hr>
+  <div class="container justify-content-center align-items-center flex-column d-flex">
+  <form style="width: 60vw;" class="justify-content-center align-items-center flex-column d-flex mt-2" (ngSubmit)="createPost()" #postForm="ngForm">
+    <div class="input-group mb-2">
       <input type="text" class="form-control" name="title" placeholder="Title" title="Title" required [(ngModel)]="post.title"/>
     </div>
 
-    <div class="input-group">
+    <div class="input-group mb-2">
       <input class="form-control" name="text" placeholder="Text" title="Text" required [(ngModel)]="post.text"/>
     </div>
 
-    <div class="input-group">
+    <div class="input-group mb-2">
       <input class="form-control" name="url" placeholder="Url" title="Url" required [(ngModel)]="post.image"/>
     </div>
 
-    <button class="btn btn-primary" type="submit" title="Add post" [disabled]="!postForm.form.valid">
+    <button class="btn btn-outline-primary" type="submit" title="Add post" [disabled]="!postForm.form.valid">
       Add post
     </button>
   </form>
+</div>
 </div>

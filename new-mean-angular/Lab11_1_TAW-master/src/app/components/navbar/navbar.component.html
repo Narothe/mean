@@ -20,7 +20,7 @@
           <a class="btn btn-outline-dark" [routerLink]="['/login']">Login</a>
           <a class="btn btn-outline-dark ms-2" [routerLink]="['/signup']">SignUp</a>
         </div>
-        <button *ngIf="authService.isLoggedIn()" class="btn btn-outline-danger ms-2" (click)="signOut()">Wyloguj</button>
+        <button *ngIf="authService.isLoggedIn()" class="btn btn-outline-danger ms-2" (click)="signOut()">Logout</button>
       </div>
     </div>
   </div>

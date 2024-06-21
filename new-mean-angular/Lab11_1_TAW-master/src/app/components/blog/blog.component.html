@@ -1,4 +1,4 @@
-<div *ngFor="let item of items$ | filter:filterText">
+<div *ngFor="let item of items$ | filter:filterText" class="d-flex justify-content-center mt-4">
   <app-blog-item
     [image]="item.image"
     [text]="item.text"
