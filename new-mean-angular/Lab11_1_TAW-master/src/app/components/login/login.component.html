@@ -1,0 +1,15 @@
+<div class="container">
+  <h1 class="entry-title"><span>Login</span></h1><hr>
+  <div class="container justify-content-center align-items-center flex-column d-flex">
+    <form class="justify-content-center align-items-center flex-column d-flex mt-2" style="width: 60vw;" autocomplete="off">
+      <div class="input-group mb-2">
+        <input [(ngModel)]="credentials.login" type="text" class="form-control" name="username" placeholder="Login" title="Login">
+      </div>
+      <div class="input-group mb-2">
+        <input [(ngModel)]="credentials.password" type="password" class="form-control" name="password" placeholder="Password" title="Password">
+      </div>
+      <button (click)="signIn()" class="btn btn-outline-primary" type="button" title="Przycisk zaloguj">Sign in</button>
+    </form>
+  </div>
+  <p-toast/>
+</div>

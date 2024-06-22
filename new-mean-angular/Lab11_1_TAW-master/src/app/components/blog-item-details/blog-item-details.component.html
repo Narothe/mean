@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="d-flex flex-row align-items-center justify-content-between" style="margin-bottom: -10px">
+    <h1 class="entry-title"><span>{{title}}</span></h1>
+    <button (click)="deleteBlogItem()" class="btn btn-outline-primary" type="button" title="Przycisk usuń">Delete post</button>
+  </div>
+  <hr>
+  <div class="container justify-content-center align-items-center flex-column d-flex">
+  <img class="rounded mb-3" style="width: 28rem;" [src]="image" >
+  <p> {{ text }} </p>
+  </div>
+</div>

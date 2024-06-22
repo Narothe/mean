@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="btn btn-light" [routerLink]="['/']">Home</a>
+        </li>
+        <li *ngIf="authService.isLoggedIn()" class="nav-item">
+          <a class="btn btn-light" [routerLink]="['/blog']">Blog</a>
+        </li>
+        <li *ngIf="authService.isLoggedIn()" class="nav-item">
+          <a class="btn btn-light" [routerLink]="['/post']">Add post</a>
+        </li>
+      </ul>
+      <form *ngIf="authService.isLoggedIn()" class="d-flex" role="search">
+        <app-search-bar (name)="getName($event)"></app-search-bar>
+      </form>
+      <div class="d-flex">
+        <div class="d-flex" *ngIf="!authService.isLoggedIn()">
+          <a class="btn btn-outline-dark" [routerLink]="['/login']">Login</a>
+          <a class="btn btn-outline-dark ms-2" [routerLink]="['/signup']">SignUp</a>
+        </div>
+        <button *ngIf="authService.isLoggedIn()" class="btn btn-outline-danger ms-2" (click)="signOut()">Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
